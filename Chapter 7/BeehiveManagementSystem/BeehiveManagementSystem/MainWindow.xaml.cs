@@ -4,12 +4,12 @@ namespace BeehiveManagementSystem
 {
     public partial class MainWindow : Window
     {
-        private Queen queen = new Queen();
+        private readonly Queen queen;
 
         public MainWindow()
         {
             InitializeComponent();
-            statusReport.Text = queen.StatusReport;
+            queen = Resources["queen"] as Queen;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

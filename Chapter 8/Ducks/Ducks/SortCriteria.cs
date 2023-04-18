@@ -1,0 +1,5 @@
+﻿enum SortCriteria
+{
+    SizeThenKind,
+    KindThenSize
+}

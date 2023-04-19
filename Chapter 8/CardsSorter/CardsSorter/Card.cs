@@ -10,6 +10,11 @@
         }
     }
 
+    public override string ToString()
+    {
+        return Name;
+    }
+
     public Card(Values value, Suits suit)
     {
         Value = value;

@@ -2,25 +2,53 @@ using UnityEngine;
 
 public class OneBallBehaviour : MonoBehaviour
 {
-    public float XRotation = 0;
-    public float YRotation = 1;
-    public float ZRotation = 0;
-    public float DegreesPerSecond = 180;
+    public float XSpeed;
+    public float YSpeed;
+    public float ZSpeed;
+    public float Multiplier = 0.75f;
+    public float TooFar = 5f;
     public int BallNumber;
 
     private static int BallCount = 0;
 
     private void Start()
     {
-        transform.position = new Vector3(3 - Random.value * 6, 3 - Random.value * 6, 3 - Random.value * 6);
+        
         BallCount++;
         BallNumber = BallCount;
+        ResetBall();
     }
 
     private void Update()
     {
-        Vector3 axis = new Vector3(XRotation, YRotation, ZRotation);
-        transform.RotateAround(Vector3.zero, axis, DegreesPerSecond * Time.deltaTime);
-        //Debug.DrawRay(Vector3.zero, axis, Color.yellow, 0.5f);
+        transform.Translate(Time.deltaTime * XSpeed, Time.deltaTime * YSpeed, Time.deltaTime * ZSpeed);
+
+		XSpeed += Multiplier - Random.value * Multiplier * 2;
+		YSpeed += Multiplier - Random.value * Multiplier * 2;
+		ZSpeed += Multiplier - Random.value * Multiplier * 2;
+
+		if (Mathf.Abs(transform.position.x) > TooFar || Mathf.Abs(transform.position.y) > TooFar || Mathf.Abs(transform.position.z) > TooFar)
+        {
+			ResetBall();
+		}
     }
+
+    private void ResetBall()
+    {
+		XSpeed = Random.value * Multiplier;
+		YSpeed = Random.value * Multiplier;
+		ZSpeed = Random.value * Multiplier;
+
+		transform.position = new Vector3(3 - Random.value * 6, 3 - Random.value * 6, 3 - Random.value * 6);
+	}
+
+	private void OnMouseDown()
+	{
+		GameController controller = Camera.main.GetComponent<GameController>();
+        if (!controller.GameOver)
+        {
+			controller.ClickedOnBall();
+			Destroy(gameObject);
+		}
+	}
 }

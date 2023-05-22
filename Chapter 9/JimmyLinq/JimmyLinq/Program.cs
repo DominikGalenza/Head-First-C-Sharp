@@ -4,29 +4,23 @@
 	{
 		static void Main(string[] args)
 		{
-			var done = false;
+			bool done = false;
 			while (!done)
 			{
 				Console.WriteLine(
 				 "\nPress G to group comics by price, R to get reviews, any other key to quit\n");
-				switch (Console.ReadKey(true).KeyChar.ToString().ToUpper())
+				done = Console.ReadKey(true).KeyChar.ToString().ToUpper() switch
 				{
-					case "G":
-						done = GroupComicsByPrice();
-						break;
-					case "R":
-						done = GetReviews();
-						break;
-					default:
-						done = true;
-						break;
-				}
+					"G" => GroupComicsByPrice(),
+					"R" => GetReviews(),
+					_ => true
+				};
 			}
 		}
 
 		private static bool GroupComicsByPrice()
 		{
-			var groups = ComicAnalyzer.GroupComicsByPrice(Comic.Catalog, Comic.Prices);
+			IEnumerable<IGrouping<PriceRange, Comic>> groups = ComicAnalyzer.GroupComicsByPrice(Comic.Catalog, Comic.Prices);
 			foreach (var group in groups)
 			{
 				Console.WriteLine($"{group.Key} comics:");
@@ -38,7 +32,7 @@
 
 		private static bool GetReviews()
 		{
-			var reviews = ComicAnalyzer.GetReviews(Comic.Catalog, Comic.Reviews);
+			IEnumerable<string> reviews = ComicAnalyzer.GetReviews(Comic.Catalog, Comic.Reviews);
 			foreach (var review in reviews)
 				Console.WriteLine(review);
 			return false;
